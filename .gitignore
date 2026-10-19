@@ -1,0 +1,40 @@
+# Dependencies and build output
+/node_modules
+/node_modules.incomplete-*
+/.next
+/out
+*.tsbuildinfo
+/next-env.d.ts
+
+# Local backups (including copies alongside source files)
+/backup-*/
+/backups/
+*.backup*
+
+# Company-supplied data: keep local until publication is explicitly authorized
+/*.xlsx
+/prisma/*seed-data*.json
+/prisma/company-seed-provenance.json
+
+# Local verification reports and fixture state, not test source code
+/TEST-PARENT-LOCK-*.json
+/thickness-crud-verification-state.json
+
+# Personal editor configuration
+/.vscode/
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+
+# Prisma local files
+/prisma/*.db
+/prisma/*.db-journal
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

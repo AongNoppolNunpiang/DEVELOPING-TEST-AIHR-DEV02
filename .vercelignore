@@ -1,0 +1,28 @@
+# Deployment upload exclusions, independent of Git publication approval.
+.git/
+node_modules/
+.next/
+out/
+.vscode/
+.vercel/
+.env*
+*.xlsx
+*.xls
+*.csv
+*.log
+*.tsbuildinfo
+*.backup*
+backup-*/
+backups/
+reports/
+prisma/*seed-data*.json
+prisma/company-seed-provenance.json
+# Company data preparation is a separately authorized local release step.
+prisma/seed.cjs
+scripts-export-seed.py
+tests/operating-temperature.test.cjs
+tests/excel-calculations.test.cjs
+parent-lock-concurrency.cjs
+thickness-crud-verification.cjs
+thickness-crud-verification-state.json
+TEST-PARENT-LOCK-*.json

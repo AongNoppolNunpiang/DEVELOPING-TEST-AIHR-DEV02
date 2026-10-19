@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Info {
+  id                   String      @id @default(cuid())
+  lineNumber           String      @unique @map("line_number")
+  location             String
+  fromLocation         String      @map("from")
+  toLocation           String      @map("to")
+  drawingNumber        String      @map("drawing_number")
+  service              String
+  material             String
+  inserviceDate        DateTime    @db.Date @map("inservice_date")
+  pipeSize             Decimal     @db.Decimal(6, 3) @map("pipe_size")
+  originalThickness    Decimal     @db.Decimal(8, 3) @map("original_thickness")
+  stress               Int
+  jointEfficiency      Int         @map("joint_efficiency")
+  ca                   Int
+  designLife           Int         @map("design_life")
+  designPressure       Int         @map("design_pressure")
+  operatingPressure    Int         @map("operating_pressure")
+  designTemperature    Int         @map("design_temperature")
+  operatingTemperature Decimal     @db.Decimal(13, 3) @map("operating_temperature")
+  cmls                 Cml[]
+
+  @@map("info")
+}
+
+model Cml {
+  id                    String      @id @default(cuid())
+  infoId                String      @map("info_id")
+  cmlNumber             Int         @map("cml_number")
+  cmlDescription        String      @map("cml_description")
+  actualOutsideDiameter Decimal?    @db.Decimal(8, 3) @map("actual_outside_diameter")
+  designThickness       Decimal?    @db.Decimal(8, 3) @map("design_thickness")
+  structuralThickness   Decimal?    @db.Decimal(8, 3) @map("structural_thickness")
+  requiredThickness     Decimal?    @db.Decimal(8, 3) @map("required_thickness")
+  info                  Info        @relation(fields: [infoId], references: [id], onDelete: Cascade)
+  testPoints            TestPoint[]
+
+  @@unique([infoId, cmlNumber])
+  @@map("cml")
+}
+
+model TestPoint {
+  id            String      @id @default(cuid())
+  cmlId         String      @map("cml_id")
+  tpNumber      Int         @map("tp_number")
+  tpDescription Int         @map("tp_description")
+  note          String?
+  cml           Cml         @relation(fields: [cmlId], references: [id], onDelete: Cascade)
+  thicknesses   Thickness[]
+
+  @@unique([cmlId, tpNumber])
+  @@map("test_point")
+}
+
+model Thickness {
+  id              String    @id @default(cuid())
+  testPointId     String    @map("test_point_id")
+  inspectionDate  DateTime  @db.Date @map("inspection_date")
+  actualThickness Decimal   @db.Decimal(8, 3) @map("actual_thickness")
+  testPoint       TestPoint @relation(fields: [testPointId], references: [id], onDelete: Cascade)
+
+  @@unique([testPointId, inspectionDate])
+  @@map("thickness")
+}
